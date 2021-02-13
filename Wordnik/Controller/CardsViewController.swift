@@ -42,10 +42,13 @@ class CardsViewController: UIViewController {
         view.addGestureRecognizer(pan)
     }
     
+    var currentIndex = 0
+    
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
         let fileView = sender.view!
-        let currentIndex = cardViews.firstIndex(of: fileView)!
+        currentIndex = cardViews.firstIndex(of: fileView)!
+        print(currentIndex)
 //        print(cardViews.index(after: currentIndex))
         var nextView: UIView = fileView
         var previousView: UIView = fileView
@@ -60,10 +63,29 @@ class CardsViewController: UIViewController {
             moveViewWithPan(view: fileView, sender: sender)
             
         case .ended:
+            if self.currentIndex == 0 {
+                UIView.animate(withDuration: 0.7, animations: {
+                   
+                    fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
+                    
+                    nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
+                    self.addPanGesture(view: nextView)
+                
+                })
+            }else if self.currentIndex == 4{
+                UIView.animate(withDuration: 0.7, animations: {
+                  
+                        fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
+                      
+                        previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
+                        self.addPanGesture(view: previousView)
+                        
+                })
+            }else{
             UIView.animate(withDuration: 0.7, animations: {
                
                 if sender.location(in: fileView).x > 125{
-                    if currentIndex != 4{
+                    if self.currentIndex != 4{
                     fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
                     }
                     nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
@@ -71,7 +93,7 @@ class CardsViewController: UIViewController {
                     
                     
                 }else if sender.location(in: fileView).x < 125 {
-                    if currentIndex != 0{
+                    if self.currentIndex != 0{
                     fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
                     }
                     previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
@@ -79,7 +101,7 @@ class CardsViewController: UIViewController {
                     
                 }
             })
-        
+            }
         default:
             break
         }
