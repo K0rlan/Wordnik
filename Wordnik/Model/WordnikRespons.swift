@@ -7,7 +7,22 @@
 
 import Foundation
 
-struct WordnikRespons: Decodable {
+struct SynonymResponse: Decodable {
+    var relationshipType: String
+    var words: [String]
+}
+
+struct DefinitionResponse: Decodable{
+    var attributionText: String
+    var text: String
+}
+
+struct PronunciationResponse: Decodable{
+    var attributionText: String
+    var raw: String
+}
+
+struct AntonymResponse: Decodable {
     var relationshipType: String
     var words: [String]
 }

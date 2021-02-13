@@ -23,7 +23,7 @@ class MainViewController: UIViewController {
         flowLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.showsHorizontalScrollIndicator = false
-        
+
         collectionView.register(SynonimsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .white
         return collectionView
@@ -81,7 +81,7 @@ class MainViewController: UIViewController {
             switch result{
             case .success(let response):
                 do {
-                    let wordnikResponse = try JSONDecoder().decode([WordnikRespons].self, from: response.data)
+                    let wordnikResponse = try JSONDecoder().decode([SynonymResponse].self, from: response.data)
                     guard let synonims = wordnikResponse.first else { return }
                     
                     self?.data = synonims.words
@@ -97,15 +97,79 @@ class MainViewController: UIViewController {
         }
         
     }
+    private func getAntonyms(_ text: String){
+        provider.request(.getAntonym(text: text)) { [weak self] result in
+            switch result{
+            case .success(let response):
+                do {
+                    let antonymResponse = try JSONDecoder().decode([AntonymResponse].self, from: response.data)
+                    guard let antonyms = antonymResponse.first else { return }
+                    
+                    print(antonyms)
+                    
+                } catch let error {
+                    print("Error in parsing: \(error)")
+                }
+            case .failure(let error):
+                let requestError = (error as NSError)
+                print("Request Error message: \(error.localizedDescription), code: \(requestError.code)")
+            }
+        }
+        
+    }
+    
+    private func getDefinitions(_ text: String){
+        provider.request(.getDefinitions(text: text)) { [weak self] result in
+            switch result{
+            case .success(let response):
+                do {
+                    let responseDefinition = try JSONDecoder().decode([DefinitionResponse].self, from: response.data)
+                    guard let definition = responseDefinition.first else { return }
+                    
+                    print(definition.text)
+                    
+                } catch let error {
+                    print("Error in parsing: \(error)")
+                }
+            case .failure(let error):
+                let requestError = (error as NSError)
+                print("Request Error message: \(error.localizedDescription), code: \(requestError.code)")
+            }
+        }
+    }
+    private func getPronunciations(_ text: String){
+        provider.request(.getPronunciations(text: text)) { [weak self] result in
+            switch result{
+            case .success(let response):
+                do {
+                    let responsePronunciation = try JSONDecoder().decode([PronunciationResponse].self, from: response.data)
+                    guard let pronunciation = responsePronunciation.first else { return }
+                    
+                    print(pronunciation.raw)
+                    
+                } catch let error {
+                    print("Error in parsing: \(error)")
+                }
+            case .failure(let error):
+                let requestError = (error as NSError)
+                print("Request Error message: \(error.localizedDescription), code: \(requestError.code)")
+            }
+        }
+    }
     
 }
 
+//MARK: - Extensions -
 extension MainViewController: UISearchBarDelegate{
    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
 
         self.getSynonims(searchText.lowercased())
+        self.getDefinitions(searchText.lowercased())
+        self.getPronunciations(searchText.lowercased())
+        self.getAntonyms(searchText.lowercased())
+        
         self.searchBar.endEditing(true)
     }
 }
