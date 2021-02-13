@@ -49,28 +49,24 @@ class CardsViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
         stackView.spacing = 3
-//        stackView.backgroundColor = .cyan
         return stackView
     }()
     var detectors = [UIView]()
     var dataText = [String]()
+    
     var cardView = CardView()
     var cardViewTwo = CardView()
     var cardViewThird = CardView()
     var cardViewFour = CardView()
     var cardViewFifth = CardView()
-    
-    var isBeginning = false
-    var isEnding = false
-    
+
     var cardViews = [CardView]()
-    var count = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setupViews()
         dataText = DataSynonims.sharedInstance.arr
-        
         
         cardViews = [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth]
         detectors = [roundDetectorFirst, roundDetectorSecond, roundDetectorThird, roundDetectorFourth, roundDetectorFifth]
@@ -92,16 +88,14 @@ class CardsViewController: UIViewController {
         
         let fileView = sender.view!
         currentIndex = cardViews.firstIndex(of: fileView as! CardView)!
-//        print(currentIndex)
-//        print(cardViews.index(after: currentIndex))
         var nextView: CardView = fileView as! CardView
         var previousView: UIView = fileView
+        
         if currentIndex != 0{
-             previousView = cardViews[cardViews.index(before: currentIndex)]
+            previousView = cardViews[cardViews.index(before: currentIndex)]
         }
         if currentIndex != 4{
             nextView = cardViews[cardViews.index(after: currentIndex)]
-//            nextView.setText(dataText[currentIndex + 1])
         }
         
         switch sender.state {
@@ -111,44 +105,42 @@ class CardsViewController: UIViewController {
         case .ended:
             if self.currentIndex == 0 {
                 UIView.animate(withDuration: 0.7, animations: {
-                   
-                    fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
                     
+                    fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
                     nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
                     self.addPanGesture(view: nextView)
                     self.detectorAssign(index: self.currentIndex+1)
-                
+                    
                 })
             }else if self.currentIndex == 4{
                 UIView.animate(withDuration: 0.7, animations: {
-                  
+                    
                     fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
-                      
                     previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
                     self.addPanGesture(view: previousView)
                     self.detectorAssign(index: self.currentIndex-1)
-                        
+                    
                 })
             }else{
-            UIView.animate(withDuration: 0.7, animations: {
-               
-                if sender.location(in: fileView).x > 125{
-                    if self.currentIndex != 4{
-                    fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
-                    }
-                    nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
-                    self.addPanGesture(view: nextView)
-                    self.detectorAssign(index: self.currentIndex+1)
+                UIView.animate(withDuration: 0.7, animations: {
                     
-                }else if sender.location(in: fileView).x < 125 {
-                    if self.currentIndex != 0{
-                    fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
+                    if sender.location(in: fileView).x > 125{
+                        if self.currentIndex != 4{
+                            fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
+                        }
+                        nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
+                        self.addPanGesture(view: nextView)
+                        self.detectorAssign(index: self.currentIndex+1)
+                        
+                    }else if sender.location(in: fileView).x < 125 {
+                        if self.currentIndex != 0{
+                            fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
+                        }
+                        previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
+                        self.addPanGesture(view: previousView)
+                        self.detectorAssign(index: self.currentIndex-1)
                     }
-                    previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
-                    self.addPanGesture(view: previousView)
-                    self.detectorAssign(index: self.currentIndex-1)
-                }
-            })
+                })
             }
         default:
             break
@@ -165,13 +157,13 @@ class CardsViewController: UIViewController {
         detectStackView.addArrangedSubview(roundDetectorThird)
         detectStackView.addArrangedSubview(roundDetectorFourth)
         detectStackView.addArrangedSubview(roundDetectorFifth)
-
+        
     }
     func detectorAssign(index: Int){
         detectors[index].backgroundColor = .red
         detectors.forEach {
             if $0 != detectors[index]{
-            $0.backgroundColor = .gray
+                $0.backgroundColor = .gray
             }
         }
     }
@@ -181,7 +173,6 @@ class CardsViewController: UIViewController {
         sender.setTranslation(CGPoint.zero, in: view)
     }
     
-
     private func setupViews(){
         [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
             self.view.addSubview($0)
