@@ -6,12 +6,20 @@
 //
 
 import UIKit
+import AVFoundation
 
 final class CardView: UIView {
 
     lazy var textLabel: UILabel = {
         let label = UILabel()
         return label
+    }()
+    
+    lazy var voiceButton: UIButton = {
+        let button = UIButton()
+        button.setImage(Constants.voice, for: .normal)
+        button.addTarget(self, action: #selector(voiceButtonPressed), for: .touchUpInside)
+        return button
     }()
     
     override init(frame: CGRect = .zero) {
@@ -24,12 +32,28 @@ final class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func voiceButtonPressed(){
+        let utterance = AVSpeechUtterance(string: textLabel.text!)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+        utterance.rate = 0.5
+        
+        let synthesizer = AVSpeechSynthesizer()
+        synthesizer.speak(utterance)
+    }
+    
     private func setupViews(){
-        self.addSubview(textLabel)
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        [textLabel, voiceButton].forEach {
+        self.addSubview($0)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         textLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        voiceButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20).isActive = true
+        voiceButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        voiceButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        voiceButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
     public func setText(_ text: String){
