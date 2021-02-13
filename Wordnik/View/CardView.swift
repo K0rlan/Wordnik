@@ -12,6 +12,7 @@ final class CardView: UIView {
 
     lazy var textLabel: UILabel = {
         let label = UILabel()
+        label.textColor = Constants.specialPurple
         return label
     }()
     
@@ -50,10 +51,10 @@ final class CardView: UIView {
         textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         textLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         
-        voiceButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20).isActive = true
-        voiceButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
-        voiceButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        voiceButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        voiceButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+        voiceButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
+        voiceButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        voiceButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     public func setText(_ text: String){

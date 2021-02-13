@@ -21,7 +21,7 @@ class MainViewController: UIViewController {
     lazy var definition: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
-        label.textColor = .black
+        label.textColor = Constants.specialPurple
         label.numberOfLines = 0
         return label
     }()
@@ -29,7 +29,7 @@ class MainViewController: UIViewController {
     lazy var pronunciation: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
-        label.textColor = .gray
+        label.textColor = Constants.specialPurple
         label.numberOfLines = 0
         return label
     }()
@@ -40,6 +40,15 @@ class MainViewController: UIViewController {
         button.alpha = 0
         button.addTarget(self, action: #selector(voiceButtonPressed), for: .touchUpInside)
         return button
+    }()
+    
+    lazy var synonimsAndAntonymsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Synonims and Antonyms"
+        label.font = .boldSystemFont(ofSize: 16)
+        label.alpha = 0
+        label.textColor = Constants.specialPurple
+        return label
     }()
     
     lazy var synonimsView: SynonimsView = {
@@ -64,9 +73,13 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = .white
         searchBar.delegate = self
         setupViews()
+        
         let button = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(recognizeCards))
         self.navigationItem.rightBarButtonItem  = button
-        
+        navigationController?.navigationBar.barTintColor = Constants.specialYellow
+        navigationItem.title = "Wordnik"
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.specialPurple]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
         
     }
    
@@ -98,7 +111,7 @@ class MainViewController: UIViewController {
     //MARK: - Setup views -
     
     private func setupViews(){
-        [searchBar, definition, pronunciation, voiceButton].forEach {
+        [searchBar, definition, pronunciation, voiceButton, definition, synonimsAndAntonymsLabel].forEach {
             self.view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -111,22 +124,24 @@ class MainViewController: UIViewController {
         pronunciation.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20).isActive = true
         pronunciation.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         
-        voiceButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10).isActive = true
+        voiceButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 17).isActive = true
         voiceButton.leadingAnchor.constraint(equalTo: pronunciation.trailingAnchor, constant: 10).isActive = true
-        voiceButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        voiceButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        voiceButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        voiceButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
         
         definition.topAnchor.constraint(equalTo: pronunciation.bottomAnchor, constant: 10).isActive = true
         definition.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         definition.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         definition.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
+        synonimsAndAntonymsLabel.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 10).isActive = true
+        synonimsAndAntonymsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
     }
     private func setupViewsForSynonims(){
         self.view.addSubview(synonimsView)
         synonimsView.translatesAutoresizingMaskIntoConstraints = false
         
-        synonimsView.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 10).isActive = true
+        synonimsView.topAnchor.constraint(equalTo: synonimsAndAntonymsLabel.bottomAnchor, constant: 10).isActive = true
         synonimsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         synonimsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         synonimsView.heightAnchor.constraint(equalToConstant: 120).isActive = true
@@ -136,7 +151,6 @@ class MainViewController: UIViewController {
         self.view.addSubview(antonymsView)
         antonymsView.translatesAutoresizingMaskIntoConstraints = false
         
-//        antonymsView.topAnchor.constraint(equalTo: synonimsView.bottomAnchor, constant: 30).isActive = true
         antonymsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         antonymsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         antonymsView.heightAnchor.constraint(equalToConstant: 120).isActive = true
@@ -222,6 +236,7 @@ class MainViewController: UIViewController {
                     
                     self?.pronunciation.text = pronunciation.raw
                     self?.voiceButton.alpha = 1
+                    self?.synonimsAndAntonymsLabel.alpha = 1
                 } catch let error {
                     print("Error in parsing: \(error)")
                 }

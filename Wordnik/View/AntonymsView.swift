@@ -9,38 +9,39 @@ import UIKit
 
 class AntonymsView: UIView {
 
+    
     lazy var roundDetectorFirst: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .red
+        view.layer.cornerRadius = 4
+        view.backgroundColor = Constants.specialYellow
         return view
     }()
     
     lazy var roundDetectorSecond: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
+        view.layer.cornerRadius = 4
+        view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorThird: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
+        view.layer.cornerRadius = 4
+        view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorFourth: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
+        view.layer.cornerRadius = 4
+        view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorFifth: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
+        view.layer.cornerRadius = 4
+        view.backgroundColor = Constants.blueGray
         return view
     }()
     
@@ -48,7 +49,7 @@ class AntonymsView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
-        stackView.spacing = 3
+        stackView.spacing = 2
         return stackView
     }()
     
@@ -161,10 +162,12 @@ class AntonymsView: UIView {
         
     }
     func detectorAssign(index: Int){
-        detectors[index].backgroundColor = .red
+        detectors[index].backgroundColor = Constants.specialYellow
         detectors.forEach {
             if $0 != detectors[index]{
-                $0.backgroundColor = .gray
+                $0.backgroundColor = Constants.blueGray
+                $0.frame.size.height = 10
+                $0.frame.size.width = 10
             }
         }
     }
@@ -175,12 +178,11 @@ class AntonymsView: UIView {
     }
     
     private func setupViews(){
-        [ cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
+        [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
             self.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
-       
+              
         cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 40).isActive = true
         cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40).isActive = true
@@ -188,13 +190,13 @@ class AntonymsView: UIView {
         
         detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
         detectStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        detectStackView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        detectStackView.heightAnchor.constraint(equalToConstant: 8).isActive = true
         
-        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorThird.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        roundDetectorThird.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 8).isActive = true
         
         cardViewTwo.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         cardViewTwo.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
