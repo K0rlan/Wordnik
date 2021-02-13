@@ -9,37 +9,38 @@ import UIKit
 
 class AntonymsView: UIView {
 
+    //MARK: - UI Elements -
     
     lazy var roundDetectorFirst: UIView = {
-        let view = SeparatorViews()
+        let view = UIView()
         view.layer.cornerRadius = 4
         view.backgroundColor = Constants.specialYellow
         return view
     }()
     
     lazy var roundDetectorSecond: UIView = {
-        let view = SeparatorViews()
+        let view = UIView()
         view.layer.cornerRadius = 4
         view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorThird: UIView = {
-        let view = SeparatorViews()
+        let view = UIView()
         view.layer.cornerRadius = 4
         view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorFourth: UIView = {
-        let view = SeparatorViews()
+        let view = UIView()
         view.layer.cornerRadius = 4
         view.backgroundColor = Constants.blueGray
         return view
     }()
     
     lazy var roundDetectorFifth: UIView = {
-        let view = SeparatorViews()
+        let view = UIView()
         view.layer.cornerRadius = 4
         view.backgroundColor = Constants.blueGray
         return view
@@ -53,8 +54,6 @@ class AntonymsView: UIView {
         return stackView
     }()
     
-    var detectors = [UIView]()
-    
     var cardView = CardView()
     var cardViewTwo = CardView()
     var cardViewThird = CardView()
@@ -62,9 +61,13 @@ class AntonymsView: UIView {
     var cardViewFifth = CardView()
 
     var cardViews = [CardView]()
-
+    
+    //MARK: - Variables -
+    
+    var detectors = [UIView]()
     var currentIndex = 0
     var data = [String]()
+    
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupViews()
@@ -79,8 +82,9 @@ class AntonymsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    func addPanGesture(view: UIView) {
+    //MARK: - Functions -
+    
+    private func addPanGesture(view: UIView) {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         view.addGestureRecognizer(pan)
         
@@ -148,12 +152,13 @@ class AntonymsView: UIView {
             break
         }
     }
-    func setTextForCards(){
+    
+    private func setTextForCards(){
         
         for i in 0..<data.count{
             cardViews[i].setText(data[i])
         }
-        
+    
         detectStackView.addArrangedSubview(roundDetectorFirst)
         detectStackView.addArrangedSubview(roundDetectorSecond)
         detectStackView.addArrangedSubview(roundDetectorThird)
@@ -161,7 +166,7 @@ class AntonymsView: UIView {
         detectStackView.addArrangedSubview(roundDetectorFifth)
         
     }
-    func detectorAssign(index: Int){
+    private func detectorAssign(index: Int){
         detectors[index].backgroundColor = Constants.specialYellow
         detectors.forEach {
             if $0 != detectors[index]{
@@ -171,7 +176,7 @@ class AntonymsView: UIView {
             }
         }
     }
-    func moveViewWithPan(view: UIView, sender: UIPanGestureRecognizer) {
+    private func moveViewWithPan(view: UIView, sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y)
         sender.setTranslation(CGPoint.zero, in: view)

@@ -9,7 +9,9 @@ import UIKit
 import AVFoundation
 
 final class CardView: UIView {
-
+    
+    //MARK: - UI Elements -
+    
     lazy var textLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constants.specialPurple
@@ -33,6 +35,8 @@ final class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Functions -
+    
     @objc func voiceButtonPressed(){
         let utterance = AVSpeechUtterance(string: textLabel.text!)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
@@ -40,6 +44,24 @@ final class CardView: UIView {
         
         let synthesizer = AVSpeechSynthesizer()
         synthesizer.speak(utterance)
+    }
+    
+    public func setText(_ text: String){
+        self.textLabel.text = text
+    }
+   
+    private func setStyles(){
+        self.layer.cornerRadius = 5
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.black.cgColor
+        self.backgroundColor = .white
+
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 3, height: 4)
+        self.layer.shadowRadius = 2
+        self.layer.shadowOpacity = 0.3
+        self.layer.masksToBounds = false
+        
     }
     
     private func setupViews(){
@@ -55,25 +77,6 @@ final class CardView: UIView {
         voiceButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         voiceButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         voiceButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
-    }
-    
-    public func setText(_ text: String){
-        self.textLabel.text = text
-    }
-   
-    
-    private func setStyles(){
-        self.layer.cornerRadius = 5
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.black.cgColor
-        self.backgroundColor = .white
-
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 3, height: 4)
-        self.layer.shadowRadius = 2
-        self.layer.shadowOpacity = 0.3
-        self.layer.masksToBounds = false
-        
     }
     
 }

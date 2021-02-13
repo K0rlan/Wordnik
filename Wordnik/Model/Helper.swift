@@ -7,11 +7,6 @@
 
 import Foundation
 import UIKit
-extension String {
-    func validatePassword() -> Bool{
-        self.count < 8 ? true : false
-    }
-}
 
 struct Constants {
     static let cyanColor = UIColor(red: 106/255, green: 204/255, blue: 206/255, alpha: 1)

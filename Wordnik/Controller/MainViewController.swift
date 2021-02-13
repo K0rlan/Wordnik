@@ -65,27 +65,25 @@ class MainViewController: UIViewController {
     
     var data = [String]()
     let provider = MoyaProvider<APIService>()
-   
     var searchText: String = ""
     
+    //MARK: - ViewDidLoad -
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         searchBar.delegate = self
         setupViews()
-        
-        let button = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(recognizeCards))
-        self.navigationItem.rightBarButtonItem  = button
-        navigationController?.navigationBar.barTintColor = Constants.specialYellow
-        navigationItem.title = "Wordnik"
-        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.specialPurple]
-        navigationController?.navigationBar.titleTextAttributes = textAttributes
-        
+        setNavigationBar()
     }
    
     //MARK: - Functions -
     
-  
+    private func setNavigationBar(){
+        navigationController?.navigationBar.barTintColor = Constants.specialYellow
+        navigationItem.title = "Wordnik"
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.specialPurple]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+    }
     
     @objc func voiceButtonPressed(){
         let utterance = AVSpeechUtterance(string: searchText)
@@ -96,17 +94,9 @@ class MainViewController: UIViewController {
         synthesizer.speak(utterance)
     }
     
-    @objc func recognizeCards(){
-        DataSingleton.sharedInstance.synonims = data
-        let cardsViewController = CardsViewController()
-        self.navigationController?.pushViewController(cardsViewController, animated: true)
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-   
     
     //MARK: - Setup views -
     
@@ -260,14 +250,6 @@ extension MainViewController: UISearchBarDelegate{
         self.getSynonims(searchText.lowercased())
         self.getDefinitions(searchText.lowercased())
         self.getPronunciations(searchText.lowercased())
-       
-        
         self.searchBar.endEditing(true)
     }
-}
-
-class DataSingleton {
-    static let sharedInstance = DataSingleton()
-    var synonims = [String]()
-    var antonyms = [String]()
 }
