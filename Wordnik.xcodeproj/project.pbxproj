@@ -20,8 +20,9 @@
 		E402D7CE25D7F95D00CA4FEC /* WordnikRespons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7CD25D7F95D00CA4FEC /* WordnikRespons.swift */; };
 		E402D7D125D7F97F00CA4FEC /* SeparatorViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7D025D7F97F00CA4FEC /* SeparatorViews.swift */; };
 		E402D7D425D7F99500CA4FEC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7D325D7F99500CA4FEC /* CardView.swift */; };
-		E402D7D725D7F9C600CA4FEC /* SynonimsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7D625D7F9C600CA4FEC /* SynonimsCollectionViewCell.swift */; };
 		E402D7DB25D7FA1D00CA4FEC /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7DA25D7FA1D00CA4FEC /* CardsViewController.swift */; };
+		E402D7E025D8718500CA4FEC /* SynonimsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7DF25D8718500CA4FEC /* SynonimsView.swift */; };
+		E402D7E425D8767F00CA4FEC /* AntonymsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D7E325D8767F00CA4FEC /* AntonymsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,8 +38,9 @@
 		E402D7CD25D7F95D00CA4FEC /* WordnikRespons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordnikRespons.swift; sourceTree = "<group>"; };
 		E402D7D025D7F97F00CA4FEC /* SeparatorViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorViews.swift; sourceTree = "<group>"; };
 		E402D7D325D7F99500CA4FEC /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		E402D7D625D7F9C600CA4FEC /* SynonimsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonimsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E402D7DA25D7FA1D00CA4FEC /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
+		E402D7DF25D8718500CA4FEC /* SynonimsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonimsView.swift; sourceTree = "<group>"; };
+		E402D7E325D8767F00CA4FEC /* AntonymsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AntonymsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +111,8 @@
 			children = (
 				E402D7D025D7F97F00CA4FEC /* SeparatorViews.swift */,
 				E402D7D325D7F99500CA4FEC /* CardView.swift */,
-				E402D7D625D7F9C600CA4FEC /* SynonimsCollectionViewCell.swift */,
+				E402D7DF25D8718500CA4FEC /* SynonimsView.swift */,
+				E402D7E325D8767F00CA4FEC /* AntonymsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -201,15 +204,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E402D7D125D7F97F00CA4FEC /* SeparatorViews.swift in Sources */,
+				E402D7E025D8718500CA4FEC /* SynonimsView.swift in Sources */,
 				E402D7A725D7F77500CA4FEC /* MainViewController.swift in Sources */,
 				E402D7DB25D7FA1D00CA4FEC /* CardsViewController.swift in Sources */,
 				E402D7A325D7F77500CA4FEC /* AppDelegate.swift in Sources */,
 				E402D7CB25D7F92E00CA4FEC /* Helper.swift in Sources */,
 				E402D7CE25D7F95D00CA4FEC /* WordnikRespons.swift in Sources */,
+				E402D7E425D8767F00CA4FEC /* AntonymsView.swift in Sources */,
 				E402D7C625D7F8EB00CA4FEC /* APIService.swift in Sources */,
 				E402D7D425D7F99500CA4FEC /* CardView.swift in Sources */,
 				E402D7A525D7F77500CA4FEC /* SceneDelegate.swift in Sources */,
-				E402D7D725D7F9C600CA4FEC /* SynonimsCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

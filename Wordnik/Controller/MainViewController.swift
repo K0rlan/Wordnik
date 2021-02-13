@@ -10,6 +10,8 @@ import Moya
 import AVFoundation
 
 class MainViewController: UIViewController {
+   
+    //MARK: - UI Elements -
     
     lazy var searchBar : UISearchBar = {
         let searchBar = UISearchBar()
@@ -39,72 +41,22 @@ class MainViewController: UIViewController {
         button.addTarget(self, action: #selector(voiceButtonPressed), for: .touchUpInside)
         return button
     }()
-    lazy var roundDetectorFirst: SeparatorViews = {
-        let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .red
+    
+    lazy var synonimsView: SynonimsView = {
+        let view = SynonimsView()
         return view
     }()
     
-    lazy var roundDetectorSecond: SeparatorViews = {
-        let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
+    lazy var antonymsView: AntonymsView = {
+        let view = AntonymsView()
         return view
     }()
-    
-    lazy var roundDetectorThird: SeparatorViews = {
-        let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
-        return view
-    }()
-    
-    lazy var roundDetectorFourth: SeparatorViews = {
-        let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
-        return view
-    }()
-    
-    lazy var roundDetectorFifth: SeparatorViews = {
-        let view = SeparatorViews()
-        view.layer.cornerRadius = 5
-        view.backgroundColor = .gray
-        return view
-    }()
-    
-    lazy var detectStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 3
-        return stackView
-    }()
-    var detectors = [UIView]()
-    
-    var cardView = CardView()
-    var cardViewTwo = CardView()
-    var cardViewThird = CardView()
-    var cardViewFour = CardView()
-    var cardViewFifth = CardView()
-
-    var cardViews = [CardView]()
-    
-//    lazy var collectionView : UICollectionView = {
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.scrollDirection = .horizontal
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-//        collectionView.showsHorizontalScrollIndicator = false
-//
-//        collectionView.register(SynonimsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-//        collectionView.backgroundColor = .white
-//        return collectionView
-//    }()
+   
+    //MARK: - Variables -
     
     var data = [String]()
     let provider = MoyaProvider<APIService>()
-    
+   
     var searchText: String = ""
     
     override func viewDidLoad() {
@@ -112,19 +64,16 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = .white
         searchBar.delegate = self
         setupViews()
-        
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
-        
         let button = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(recognizeCards))
         self.navigationItem.rightBarButtonItem  = button
         
-        cardViews = [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth]
-        detectors = [roundDetectorFirst, roundDetectorSecond, roundDetectorThird, roundDetectorFourth, roundDetectorFifth]
         
-        addPanGesture(view: cardView)
     }
    
+    //MARK: - Functions -
+    
+  
+    
     @objc func voiceButtonPressed(){
         let utterance = AVSpeechUtterance(string: searchText)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
@@ -135,115 +84,21 @@ class MainViewController: UIViewController {
     }
     
     @objc func recognizeCards(){
-        DataSynonims.sharedInstance.arr = data
+        DataSingleton.sharedInstance.synonims = data
         let cardsViewController = CardsViewController()
         self.navigationController?.pushViewController(cardsViewController, animated: true)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-//        collectionView.endEditing(true)
     }
     
-    func addPanGesture(view: UIView) {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        view.addGestureRecognizer(pan)
-        
-    }
+   
     
-    var currentIndex = 0
-    
-    @objc func handlePan(sender: UIPanGestureRecognizer) {
-        
-        let fileView = sender.view!
-        currentIndex = cardViews.firstIndex(of: fileView as! CardView)!
-        var nextView: CardView = fileView as! CardView
-        var previousView: UIView = fileView
-        
-        if currentIndex != 0{
-            previousView = cardViews[cardViews.index(before: currentIndex)]
-        }
-        if currentIndex != 4{
-            nextView = cardViews[cardViews.index(after: currentIndex)]
-        }
-        
-        switch sender.state {
-        case .began, .changed:
-            moveViewWithPan(view: fileView, sender: sender)
-            
-        case .ended:
-            if self.currentIndex == 0 {
-                UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.view.center.x - 290,y: fileView.center .y)
-                    nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
-                    self.addPanGesture(view: nextView)
-                    self.detectorAssign(index: self.currentIndex+1)
-                    
-                })
-            }else if self.currentIndex == 4{
-                UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.view.center.x + 290,y: fileView.center .y)
-                    previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
-                    self.addPanGesture(view: previousView)
-                    self.detectorAssign(index: self.currentIndex-1)
-                    
-                })
-            }else{
-                UIView.animate(withDuration: 0.7, animations: {
-                    
-                    if sender.location(in: fileView).x > 125{
-                        if self.currentIndex != 4{
-                            fileView.center = CGPoint(x: self.view.center.x - 290,y: fileView.center .y)
-                        }
-                        nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
-                        self.addPanGesture(view: nextView)
-                        self.detectorAssign(index: self.currentIndex+1)
-                        
-                    }else if sender.location(in: fileView).x < 125 {
-                        if self.currentIndex != 0{
-                            fileView.center = CGPoint(x: self.view.center.x + 290,y: fileView.center .y)
-                        }
-                        previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
-                        self.addPanGesture(view: previousView)
-                        self.detectorAssign(index: self.currentIndex-1)
-                    }
-                })
-            }
-        default:
-            break
-        }
-    }
-    func setTextForCards(){
-        
-        for i in 0..<data.count{
-            cardViews[i].setText(data[i])
-        }
-        
-        detectStackView.addArrangedSubview(roundDetectorFirst)
-        detectStackView.addArrangedSubview(roundDetectorSecond)
-        detectStackView.addArrangedSubview(roundDetectorThird)
-        detectStackView.addArrangedSubview(roundDetectorFourth)
-        detectStackView.addArrangedSubview(roundDetectorFifth)
-        
-    }
-    func detectorAssign(index: Int){
-        detectors[index].backgroundColor = .red
-        detectors.forEach {
-            if $0 != detectors[index]{
-                $0.backgroundColor = .gray
-            }
-        }
-    }
-    func moveViewWithPan(view: UIView, sender: UIPanGestureRecognizer) {
-        let translation = sender.translation(in: view)
-        view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y)
-        sender.setTranslation(CGPoint.zero, in: view)
-    }
+    //MARK: - Setup views -
     
     private func setupViews(){
-        [searchBar, definition, pronunciation, voiceButton, cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
+        [searchBar, definition, pronunciation, voiceButton].forEach {
             self.view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -255,12 +110,9 @@ class MainViewController: UIViewController {
         
         pronunciation.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20).isActive = true
         pronunciation.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-//        pronunciation.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        pronunciation.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
         voiceButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10).isActive = true
         voiceButton.leadingAnchor.constraint(equalTo: pronunciation.trailingAnchor, constant: 10).isActive = true
-//        voiceButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         voiceButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         voiceButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
@@ -269,49 +121,28 @@ class MainViewController: UIViewController {
         definition.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         definition.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-   
-    
-//        collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20).isActive = true
-//        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        collectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        
-        cardView.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 20).isActive = true
-        cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        cardView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
-        detectStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        detectStackView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        
-        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorThird.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 10).isActive = true
-        
-        cardViewTwo.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 20).isActive = true
-        cardViewTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewTwo.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewTwo.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewThird.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 20).isActive = true
-        cardViewThird.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewThird.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewThird.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewFour.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 20).isActive = true
-        cardViewFour.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewFour.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewFour.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewFifth.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 20).isActive = true
-        cardViewFifth.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewFifth.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewFifth.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
     }
+    private func setupViewsForSynonims(){
+        self.view.addSubview(synonimsView)
+        synonimsView.translatesAutoresizingMaskIntoConstraints = false
+        
+        synonimsView.topAnchor.constraint(equalTo: definition.bottomAnchor, constant: 10).isActive = true
+        synonimsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        synonimsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        synonimsView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+    }
+    
+    private func setupViewsForAntonyms(){
+        self.view.addSubview(antonymsView)
+        antonymsView.translatesAutoresizingMaskIntoConstraints = false
+        
+//        antonymsView.topAnchor.constraint(equalTo: synonimsView.bottomAnchor, constant: 30).isActive = true
+        antonymsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        antonymsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        antonymsView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        antonymsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
+    }
+    
     //MARK: - Networking -
     
     private func getSynonims(_ text: String){
@@ -323,8 +154,10 @@ class MainViewController: UIViewController {
                     guard let synonims = wordnikResponse.first else { return }
                     
                     self?.data = synonims.words
-//                    self?.collectionView.reloadData()
-                    self?.setTextForCards()
+                    DataSingleton.sharedInstance.synonims = synonims.words
+                    DispatchQueue.main.async {
+                        self?.setupViewsForSynonims()
+                    }
                 } catch let error {
                     print("Error in parsing: \(error)")
                 }
@@ -343,7 +176,11 @@ class MainViewController: UIViewController {
                     let antonymResponse = try JSONDecoder().decode([AntonymResponse].self, from: response.data)
                     guard let antonyms = antonymResponse.first else { return }
                     
-                    print(antonyms)
+                    self?.data = antonyms.words
+                    DataSingleton.sharedInstance.antonyms = antonyms.words
+                    DispatchQueue.main.async {
+                        self?.setupViewsForAntonyms()
+                    }
                     
                 } catch let error {
                     print("Error in parsing: \(error)")
@@ -398,49 +235,24 @@ class MainViewController: UIViewController {
 }
 
 //MARK: - Extensions -
+
 extension MainViewController: UISearchBarDelegate{
    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
         self.searchText = searchText
+        self.getAntonyms(searchText.lowercased())
         self.getSynonims(searchText.lowercased())
         self.getDefinitions(searchText.lowercased())
         self.getPronunciations(searchText.lowercased())
-        self.getAntonyms(searchText.lowercased())
+       
         
         self.searchBar.endEditing(true)
     }
 }
 
-//extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return data.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SynonimsCollectionViewCell
-//
-//        cell.textLabel.text = data[indexPath.row]
-//        return cell
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: 150, height: 120)
-//    }
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.view.endEditing(true)
-//
-//        let utterance = AVSpeechUtterance(string: data[indexPath.row])
-//        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-//        utterance.rate = 0.5
-//
-//        let synthesizer = AVSpeechSynthesizer()
-//        synthesizer.speak(utterance)
-//    }
-//
-//}
-class DataSynonims {
-    static let sharedInstance = DataSynonims()
-    var arr = [String]()
+class DataSingleton {
+    static let sharedInstance = DataSingleton()
+    var synonims = [String]()
+    var antonyms = [String]()
 }

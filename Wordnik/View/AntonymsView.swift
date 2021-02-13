@@ -1,45 +1,45 @@
 //
-//  CardsViewController.swift
+//  AntonymsView.swift
+//  Wordnik
 //
-//
-//  Created by Korlan Omarova on 13.02.2021.
+//  Created by Korlan Omarova on 14.02.2021.
 //
 
 import UIKit
 
-class CardsViewController: UIViewController {
-    
-    lazy var roundDetectorFirst: SeparatorViews = {
+class AntonymsView: UIView {
+
+    lazy var roundDetectorFirst: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 5
         view.backgroundColor = .red
         return view
     }()
     
-    lazy var roundDetectorSecond: SeparatorViews = {
+    lazy var roundDetectorSecond: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 5
         view.backgroundColor = .gray
         return view
     }()
     
-    lazy var roundDetectorThird: SeparatorViews = {
+    lazy var roundDetectorThird: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 5
         view.backgroundColor = .gray
         return view
     }()
     
-    lazy var roundDetectorFourth: SeparatorViews = {
+    lazy var roundDetectorFourth: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 5
         view.backgroundColor = .gray
         return view
     }()
     
-    lazy var roundDetectorFifth: SeparatorViews = {
+    lazy var roundDetectorFifth: UIView = {
         let view = SeparatorViews()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 5
         view.backgroundColor = .gray
         return view
     }()
@@ -51,8 +51,8 @@ class CardsViewController: UIViewController {
         stackView.spacing = 3
         return stackView
     }()
+    
     var detectors = [UIView]()
-    var dataText = [String]()
     
     var cardView = CardView()
     var cardViewTwo = CardView()
@@ -61,28 +61,29 @@ class CardsViewController: UIViewController {
     var cardViewFifth = CardView()
 
     var cardViews = [CardView]()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .white
+
+    var currentIndex = 0
+    var data = [String]()
+    override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
         setupViews()
-        dataText = DataSingleton.sharedInstance.synonims
+        data = DataSingleton.sharedInstance.antonyms
         
         cardViews = [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth]
         detectors = [roundDetectorFirst, roundDetectorSecond, roundDetectorThird, roundDetectorFourth, roundDetectorFifth]
         setTextForCards()
         addPanGesture(view: cardView)
-        
-        
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     func addPanGesture(view: UIView) {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         view.addGestureRecognizer(pan)
         
     }
-    
-    var currentIndex = 0
     
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
@@ -106,8 +107,8 @@ class CardsViewController: UIViewController {
             if self.currentIndex == 0 {
                 UIView.animate(withDuration: 0.7, animations: {
                     
-                    fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
-                    nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
+                    fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
+                    nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
                     self.addPanGesture(view: nextView)
                     self.detectorAssign(index: self.currentIndex+1)
                     
@@ -115,8 +116,8 @@ class CardsViewController: UIViewController {
             }else if self.currentIndex == 4{
                 UIView.animate(withDuration: 0.7, animations: {
                     
-                    fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
-                    previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
+                    fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
+                    previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
                     self.addPanGesture(view: previousView)
                     self.detectorAssign(index: self.currentIndex-1)
                     
@@ -126,17 +127,17 @@ class CardsViewController: UIViewController {
                     
                     if sender.location(in: fileView).x > 125{
                         if self.currentIndex != 4{
-                            fileView.center = CGPoint(x: self.view.center.x - 285,y: fileView.center .y)
+                            fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
                         }
-                        nextView.center = CGPoint(x: nextView.center.x  - 285,y: fileView.center.y)
+                        nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
                         self.addPanGesture(view: nextView)
                         self.detectorAssign(index: self.currentIndex+1)
                         
                     }else if sender.location(in: fileView).x < 125 {
                         if self.currentIndex != 0{
-                            fileView.center = CGPoint(x: self.view.center.x + 285,y: fileView.center .y)
+                            fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
                         }
-                        previousView.center = CGPoint(x: previousView.center.x  + 285,y: fileView.center.y)
+                        previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
                         self.addPanGesture(view: previousView)
                         self.detectorAssign(index: self.currentIndex-1)
                     }
@@ -148,8 +149,8 @@ class CardsViewController: UIViewController {
     }
     func setTextForCards(){
         
-        for i in 0..<dataText.count{
-            cardViews[i].setText(dataText[i])
+        for i in 0..<data.count{
+            cardViews[i].setText(data[i])
         }
         
         detectStackView.addArrangedSubview(roundDetectorFirst)
@@ -174,48 +175,47 @@ class CardsViewController: UIViewController {
     }
     
     private func setupViews(){
-        [cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
-            self.view.addSubview($0)
+        [ cardView, cardViewTwo, cardViewThird, cardViewFour, cardViewFifth, detectStackView].forEach {
+            self.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        cardView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+       
+        cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 40).isActive = true
+        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40).isActive = true
+        cardView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
-        detectStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        detectStackView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        detectStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        detectStackView.heightAnchor.constraint(equalToConstant: 10).isActive = true
         
-        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        roundDetectorThird.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        roundDetectorThird.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 10).isActive = true
         
-        cardViewTwo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        cardViewTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewTwo.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        cardViewTwo.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cardViewTwo.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+        cardViewTwo.heightAnchor.constraint(equalToConstant: 100).isActive = true
         cardViewTwo.widthAnchor.constraint(equalToConstant: 250).isActive = true
         
-        cardViewThird.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        cardViewThird.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewThird.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        cardViewThird.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cardViewThird.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+        cardViewThird.heightAnchor.constraint(equalToConstant: 100).isActive = true
         cardViewThird.widthAnchor.constraint(equalToConstant: 250).isActive = true
         
-        cardViewFour.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        cardViewFour.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewFour.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        cardViewFour.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cardViewFour.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+        cardViewFour.heightAnchor.constraint(equalToConstant: 100).isActive = true
         cardViewFour.widthAnchor.constraint(equalToConstant: 250).isActive = true
         
-        cardViewFifth.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        cardViewFifth.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 250).isActive = true
-        cardViewFifth.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        cardViewFifth.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cardViewFifth.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+        cardViewFifth.heightAnchor.constraint(equalToConstant: 100).isActive = true
         cardViewFifth.widthAnchor.constraint(equalToConstant: 250).isActive = true
         
-        
-        
     }
-}
 
+}
