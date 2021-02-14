@@ -203,8 +203,8 @@ class AntonymsView: UIView {
         }
               
         cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 40).isActive = true
-        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40).isActive = true
+        cardView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        cardView.widthAnchor.constraint(equalToConstant: 250).isActive = true
         cardView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
