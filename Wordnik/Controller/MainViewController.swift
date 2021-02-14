@@ -58,6 +58,7 @@ class MainViewController: UIViewController {
     
     lazy var synonimsView: SynonimsView = {
         let view = SynonimsView()
+        view.data = DataSingleton.sharedInstance.synonims
         return view
     }()
     
@@ -154,7 +155,7 @@ class MainViewController: UIViewController {
         antonymsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         antonymsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         antonymsView.heightAnchor.constraint(equalToConstant: 120).isActive = true
-        antonymsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
+        antonymsView.topAnchor.constraint(equalTo: synonimsAndAntonymsLabel.bottomAnchor, constant: 150).isActive = true
     }
     
     //MARK: - Networking -

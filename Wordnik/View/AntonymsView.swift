@@ -111,18 +111,26 @@ class AntonymsView: UIView {
         case .ended:
             if self.currentIndex == 0 {
                 UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
-                    nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
+                    if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.83,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.83,y: fileView.center.y)
+                    }else{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.9,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.9,y: fileView.center.y)
+                    }
                     self.addPanGesture(view: nextView)
                     self.detectorAssign(index: self.currentIndex+1)
                     
                 })
-            }else if self.currentIndex == 4{
+            }else if self.currentIndex == cardViews.count - 1{
                 UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
-                    previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
+                    if self.frame.width > 360{
+                    fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.83,y: fileView.center .y)
+                    previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.83,y: fileView.center.y)
+                    }else{
+                        fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.9,y: fileView.center .y)
+                        previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.9,y: fileView.center.y)
+                    }
                     self.addPanGesture(view: previousView)
                     self.detectorAssign(index: self.currentIndex-1)
                     
@@ -131,18 +139,24 @@ class AntonymsView: UIView {
                 UIView.animate(withDuration: 0.7, animations: {
                     
                     if sender.location(in: fileView).x > 125{
-                        if self.currentIndex != 4{
-                            fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
+                        if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.83,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.83,y: fileView.center.y)
+                        }else{
+                            fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.9,y: fileView.center .y)
+                            nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.9,y: fileView.center.y)
                         }
-                        nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
                         self.addPanGesture(view: nextView)
                         self.detectorAssign(index: self.currentIndex+1)
                         
                     }else if sender.location(in: fileView).x < 125 {
-                        if self.currentIndex != 0{
-                            fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
+                        if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.83,y: fileView.center .y)
+                        previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.83, y: fileView.center.y)
+                        }else{
+                            fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.9,y: fileView.center .y)
+                            previousView.center = CGPoint(x: previousView.center.x  + self.frame.width *  0.9, y: fileView.center.y)
                         }
-                        previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
                         self.addPanGesture(view: previousView)
                         self.detectorAssign(index: self.currentIndex-1)
                     }

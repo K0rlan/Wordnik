@@ -101,7 +101,7 @@ class SynonimsView: UIView {
         if currentIndex != 0{
             previousView = cardViews[cardViews.index(before: currentIndex)]
         }
-        if currentIndex != 4{
+        if currentIndex != cardViews.count - 1{
             nextView = cardViews[cardViews.index(after: currentIndex)]
         }
         
@@ -112,18 +112,26 @@ class SynonimsView: UIView {
         case .ended:
             if self.currentIndex == 0 {
                 UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
-                    nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
+                    if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.83,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.83,y: fileView.center.y)
+                    }else{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.9,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.9,y: fileView.center.y)
+                    }
                     self.addPanGesture(view: nextView)
                     self.detectorAssign(index: self.currentIndex+1)
                     
                 })
-            }else if self.currentIndex == 4{
+            }else if self.currentIndex == cardViews.count - 1{
                 UIView.animate(withDuration: 0.7, animations: {
-                    
-                    fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
-                    previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
+                    if self.frame.width > 360{
+                    fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.83,y: fileView.center .y)
+                    previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.83,y: fileView.center.y)
+                    }else{
+                        fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.9,y: fileView.center .y)
+                        previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.9,y: fileView.center.y)
+                    }
                     self.addPanGesture(view: previousView)
                     self.detectorAssign(index: self.currentIndex-1)
                     
@@ -132,18 +140,24 @@ class SynonimsView: UIView {
                 UIView.animate(withDuration: 0.7, animations: {
                     
                     if sender.location(in: fileView).x > 125{
-                        if self.currentIndex != 4{
-                            fileView.center = CGPoint(x: self.center.x - 290,y: fileView.center .y)
+                        if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.83,y: fileView.center .y)
+                        nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.83,y: fileView.center.y)
+                        }else{
+                            fileView.center = CGPoint(x: self.center.x - self.frame.width * 0.9,y: fileView.center .y)
+                            nextView.center = CGPoint(x: nextView.center.x  - self.frame.width * 0.9,y: fileView.center.y)
                         }
-                        nextView.center = CGPoint(x: nextView.center.x  - 290,y: fileView.center.y)
                         self.addPanGesture(view: nextView)
                         self.detectorAssign(index: self.currentIndex+1)
                         
                     }else if sender.location(in: fileView).x < 125 {
-                        if self.currentIndex != 0{
-                            fileView.center = CGPoint(x: self.center.x + 290,y: fileView.center .y)
+                        if self.frame.width > 360{
+                        fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.83,y: fileView.center .y)
+                        previousView.center = CGPoint(x: previousView.center.x  + self.frame.width * 0.83, y: fileView.center.y)
+                        }else{
+                            fileView.center = CGPoint(x: self.center.x + self.frame.width * 0.9,y: fileView.center .y)
+                            previousView.center = CGPoint(x: previousView.center.x  + self.frame.width *  0.9, y: fileView.center.y)
                         }
-                        previousView.center = CGPoint(x: previousView.center.x  + 290,y: fileView.center.y)
                         self.addPanGesture(view: previousView)
                         self.detectorAssign(index: self.currentIndex-1)
                     }
@@ -152,6 +166,9 @@ class SynonimsView: UIView {
         default:
             break
         }
+    }
+    public func setData(data: [String]){
+        self.data = data
     }
     private func setTextForCards(){
         
@@ -188,41 +205,42 @@ class SynonimsView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
        
-        cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 40).isActive = true
-        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40).isActive = true
-        cardView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
-        detectStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        detectStackView.heightAnchor.constraint(equalToConstant: 8).isActive = true
-        
-        roundDetectorFirst.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        roundDetectorSecond.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        roundDetectorThird.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        roundDetectorFourth.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        roundDetectorFifth.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        
-        cardViewTwo.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardViewTwo.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
-        cardViewTwo.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewTwo.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewThird.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardViewThird.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
-        cardViewThird.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewThird.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewFour.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardViewFour.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
-        cardViewFour.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewFour.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
-        cardViewFifth.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cardViewFifth.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
-        cardViewFifth.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        cardViewFifth.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        
+                cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                cardView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+                cardView.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                cardView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                
+                detectStackView.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 20).isActive = true
+                detectStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+                detectStackView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+                
+                roundDetectorFirst.widthAnchor.constraint(equalToConstant: 8).isActive = true
+                roundDetectorSecond.widthAnchor.constraint(equalToConstant: 8).isActive = true
+                roundDetectorThird.widthAnchor.constraint(equalToConstant: 8).isActive = true
+                roundDetectorFourth.widthAnchor.constraint(equalToConstant: 8).isActive = true
+                roundDetectorFifth.widthAnchor.constraint(equalToConstant: 8).isActive = true
+                
+                cardViewTwo.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                cardViewTwo.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+                cardViewTwo.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                cardViewTwo.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                
+                cardViewThird.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                cardViewThird.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+                cardViewThird.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                cardViewThird.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                
+                cardViewFour.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                cardViewFour.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+                cardViewFour.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                cardViewFour.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                
+                cardViewFifth.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                cardViewFifth.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 250).isActive = true
+                cardViewFifth.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                cardViewFifth.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                
+//
     }
 
 }
