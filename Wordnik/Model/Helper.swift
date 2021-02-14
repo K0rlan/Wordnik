@@ -15,5 +15,4 @@ struct Constants {
     static let blueGray = UIColor(red: 144/255, green: 173/255, blue: 198/255, alpha: 1)
     static let pewter = UIColor(red: 233/255, green: 234/255, blue: 236/255, alpha: 1)
     static let voice = UIImage(named: "megaphone")
-    
  }

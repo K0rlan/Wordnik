@@ -18,6 +18,11 @@ class MainViewController: UIViewController {
         return searchBar
     }()
     
+    lazy var initialView : InitialView = {
+        let initialView = InitialView()
+        return initialView
+    }()
+    
     lazy var definition: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -101,10 +106,15 @@ class MainViewController: UIViewController {
     //MARK: - Setup views -
     
     private func setupViews(){
-        [searchBar, definition, pronunciation, voiceButton, definition, synonimsAndAntonymsLabel].forEach {
+        [searchBar, definition, pronunciation, voiceButton, definition, synonimsAndAntonymsLabel, initialView].forEach {
             self.view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        initialView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        initialView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        initialView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        initialView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -244,6 +254,7 @@ class MainViewController: UIViewController {
 extension MainViewController: UISearchBarDelegate{
    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.initialView.alpha = 0
         guard let searchText = searchBar.text else { return }
         self.searchText = searchText
         self.getAntonyms(searchText.lowercased())
